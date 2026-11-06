@@ -57,7 +57,7 @@ Aplikacja implementuje pełny protokół kryptograficzny BLE kontrolerów Zwift 
 ## 4. Szybki start (Krok po kroku)
 
 1. **Uruchomienie:**
-   - Pobierz i uruchom plik `VeloBridge.exe`.
+   - Pobierz i uruchom plik `VeloBridge.exe` (lub użyj pliku wsadowego `Uruchom_VeloBridge.bat`).
    - Program jest w 100% portable – nie wymaga instalatora ani uprawnień administratora.
 2. **Wybudzenie kontrolerów:**
    - Naciśnij dowolny przycisk na manetkach Zwift Play lub Zwift Click.
@@ -157,6 +157,9 @@ Wszystkie ustawienia programu są trwale przechowywane w czytelnym pliku formatu
 
 ### Lokalizacja pliku:
 1. **Tryb przenośny (Portable):** Bezpośrednio w katalogu z plikiem `VeloBridge.exe`.
+2. **Katalog danych użytkownika (Fallback):** `%APPDATA%\VeloBridge\VeloBridge_config.json`.
+
+*(Jeśli w katalogu znajdował się starszy plik `config.json`, program automatycznie migruje z niego wszystkie ustawienia i adresy MAC).*
 
 ### Przykładowa zawartość:
 ```json
@@ -194,7 +197,29 @@ Wszystkie ustawienia programu są trwale przechowywane w czytelnym pliku formatu
 
 ---
 
-## 9. Wsparcie projektu
+## 9. Historia zmian (Changelog)
+
+### Wersja 1.5
+- **Poprawka stanu połączenia i synchronizacja baterii (`PRO v1.5`):** Wyeliminowano pozorny stan połączenia oraz fikcyjne odczyty baterii po uruchomieniu aplikacji przy wyłączonych manetkach. Okno „STAN POŁĄCZENIA” oraz górny pasek startują w stanie `○ MOST ROZŁĄCZONY` z wygaszonymi diodami oraz stanem baterii `🔋 --%`. Dodano automatyczne resetowanie baterii i wskaźników po rozłączeniu kontrolerów.
+
+### Wersja 1.4
+- **Ujednolicenie architektury i kompilacji (`PRO v1.4`):** Centralizacja wersjonowania, przenośna konfiguracja kompilacji `PyInstaller` oraz rozbudowany pakiet 21 testów jednostkowych obejmujących kryptografię, protokół BLE, stabilność sesji GATT i sterowanie MyWhoosh.
+
+### Wersja 1.3
+- **Obsługa przycisku Menu / Pauzy w MyWhoosh:** Wielowarstwowe wybudzanie i klikanie przycisku Menu na HUD MyWhoosh (z automatycznym przywróceniem kursora myszy), wysyłanie hybrydowego kodu `ESC` (`ScanCode 0x01` + `VK_ESCAPE 0x1B` + `PostMessage`) oraz nowe akcje w mapowaniu: *Pauza treningu (Spacja)* i *Menu + Pauza treningu*.
+- **Automatyczne przekazywanie fokusu do okna MyWhoosh (`AttachThreadInput`):** Gwarantuje, że skróty klawiszowe i zmiana biegów trafiają bezpośrednio do gry nawet wtedy, gdy wcześniej kliknięto poza okno MyWhoosh.
+- **Stabilność połączenia BLE i Auto-Reconnect:** Automatyczne wznawianie zerwanego połączenia z kontrolerami w tle bez przerywania treningu, kaskadowe łączenie manetek Zwift Play zapobiegające kolizjom adaptera Bluetooth, aktywny pakiet podtrzymujący połączenie (*Keepalive* co 45s) oraz blokada współbieżnych zapisów GATT i debouncing wibracji.
+
+### Wersja 1.2
+- **Konfigurator ścieżki do gry MyWhoosh (`📁 Ścieżka gry`):** Dedykowane okno wyboru i testowania ścieżki `.exe` lub skrótu `.lnk` (obsługa wersji Microsoft Store, `shell:AppsFolder` oraz MyWhoosh HD) z zapisem w `VeloBridge_config.json`.
+- **Uporządkowany interfejs użytkownika:** Nowe logo i ikona programu, przycisk wsparcia projektu w prawym dolnym rogu kokpitu oraz usprawniony pasek nagłówkowy.
+
+### Wersja 1.1
+- **Pełna obsługa zestawu Zwift Click (Lewa + Prawa) oraz Zwift Play:** Automatyczne rozpoznawanie podłączonego modelu kontrolerów, automatyczne przełączanie wizualizacji i blokowanie nieaktywnego profilu sprzętowego, obsługa parowania mostkowego Zwift Click oraz dekodowanie pakietów `0x23` / `0x07` i filtracja pakietów *Heartbeat* (`0x15` / `0x19`).
+
+---
+
+## 10. Wsparcie projektu
 
 Projekt **VeloBridge** jest tworzony i rozwijany z pasji do kolarstwa wirtualnego, treningu na trenażerze i inżynierii wstecznej Bluetooth Low Energy.
 
