@@ -1,114 +1,154 @@
-# 🚴 VeloBridge Pro — Virtual Shifting dla MyWhoosh
-### Kompleksowy podręcznik użytkownika, instrukcja konfiguracji i opis techniczny
+﻿# 🚴 VeloBridge - Virtual Shifting dla MyWhoosh (Windows & macOS)
+### Kompleksowy podręcznik użytkownika, instrukcja konfiguracji i opis możliwości
+
+**VeloBridge** to lekka, samodzielna aplikacja typu **portable (bez konieczności instalacji)** dla systemów **Windows** oraz **macOS**, która pozwala wykorzystać bezprzewodowe kontrolery **Zwift Play** oraz **Zwift Click** do wirtualnej zmiany biegów (**Virtual Shifting / MyShift**) oraz pełnego sterowania w grze **MyWhoosh**.
 
 ---
 
 ## 📖 Spis treści
-1. [O projekcie VeloBridge](#1-o-projekcie-velobridge)
+1. [O programie VeloBridge](#1-o-programie-velobridge)
 2. [Kluczowe możliwości](#2-kluczowe-możliwości)
 3. [Wymagania systemowe i sprzętowe](#3-wymagania-systemowe-i-sprzętowe)
 4. [Szybki start (Krok po kroku)](#4-szybki-start-krok-po-kroku)
-5. [Konfiguracja ścieżki do gry MyWhoosh (Microsoft Store & MyWhoosh HD)](#5-konfiguracja-ścieżki-do-gry-mywhoosh-microsoft-store--mywhoosh-hd)
+   - [4.1. System Windows](#41-system-windows)
+   - [4.2. System macOS (Instalacja i odblokowanie)](#42-system-macos-instalacja-i-odblokowanie)
+   - [4.3. Wymagane uprawnienia w systemie macOS](#43-wymagane-uprawnienia-w-systemie-macos-bardzo-ważne)
+   - [4.4. Połączenie z manetkami i jazda w MyWhoosh](#44-połączenie-z-manetkami-i-jazda-w-mywhoosh)
+5. [Konfiguracja ścieżki do gry MyWhoosh](#5-konfiguracja-ścieżki-do-gry-mywhoosh)
+   - [A. Windows (Microsoft Store)](#a-wersja-ze-sklepu-microsoft-store-uwp--msix)
+   - [B. Windows (MyWhoosh HD / Standalone)](#b-wersja-mywhoosh-hd--standalone)
+   - [C. macOS (Mac App Store & /Applications)](#c-system-macos-mac-app-store--katalog-applications)
 6. [Domyślne sterowanie i mapa przycisków](#6-domyślne-sterowanie-i-mapa-przycisków)
-7. [Plik konfiguracyjny (VeloBridge_config.json)](#7-plik-konfiguracyjny-velobridge_configjson)
-8. [Rozwiązywanie problemów (FAQ)](#8-rozwiązywanie-problemów-faq)
-9. [Wsparcie projektu](#9-wsparcie-projektu)
+   - [Zestaw Zwift Play](#-zestaw-zwift-play-montowane-na-baranku-kierownicy)
+   - [Zestaw Zwift Click](#-zestaw-zwift-click-obejmy-na-kierownicę)
+   - [Własna personalizacja przycisków](#-personalizacja-przycisków)
+7. [Wskazówki dla zestawu Zwift Cog](#7-wskazówki-dla-zestawu-zwift-cog)
+8. [Plik konfiguracyjny (VeloBridge_config.json)](#8-plik-konfiguracyjny-velobridge_configjson)
+9. [Rozwiązywanie problemów (FAQ)](#9-rozwiązywanie-problemów-faq)
+10. [Historia zmian (Changelog)](#10-historia-zmian-changelog)
+11. [Wsparcie projektu](#11-wsparcie-projektu)
 
 ---
 
-## 1. O projekcie VeloBridge
+## 1. O programie VeloBridge
 
-**VeloBridge** to lekka, samodzielna aplikacja typu **Portable (bez konieczności instalacji)** dla systemu Windows, która łączy bezprzewodowe kontrolery **Zwift Play** oraz **Zwift Click** z grą **MyWhoosh**.
+Aplikacja implementuje bezpieczny protokół komunikacyjny kontrolerów Zwift (wymiana kluczy ECDH, szyfrowanie AES-256-CCM) i tłumaczy stany przycisków oraz łopatek na bezpośrednie, natywne zdarzenia wejścia:
+- **Windows:** sprzętowe kody klawiatury DirectInput.
+- **macOS:** niskopoziomowe zdarzenia wejścia frameworku Quartz / CoreGraphics.
 
-Aplikacja implementuje pełny protokół kryptograficzny BLE kontrolerów Zwift i tłumaczy stany przycisków oraz łopatek na bezpośrednie kody sprzętowe **DirectInput** (Hardware Scan Codes). Pozwala to na natychmiastowe korzystanie z wirtualnej zmiany biegów (**Virtual Shifting / MyShift**) oraz pełnego sterowania rowerzystą (skręcanie, zawracanie, kamera, powerupy, menu) w silniku Unreal Engine gry MyWhoosh.
+Dzięki temu możesz natychmiast korzystać z wirtualnej zmiany biegów (**Virtual Shifting / MyShift**) oraz pełnego sterowania rowerzystą (skręcanie, zawracanie, zmiana widoku kamery, powerupy, menu) w silniku 3D gry MyWhoosh na obu platformach.
 
 ---
 
 ## 2. Kluczowe możliwości
 
-- ⚡ **Wirtualna zmiana biegów (MyShift 30 przełożeń):** Zmiana biegów za pomocą łopatek lub przycisków `+` / `–` kontrolerów (bieg startowy: 15).
-- 🔒 **Bezpieczna komunikacja Bluetooth Low Energy (BLE):**
-  - Wymiana kluczy **ECDH** na krzywej eliptycznej `SECP256R1` (NIST P-256).
-  - Derywacja kluczy symetrycznych **HKDF-SHA256**.
-  - Dwukierunkowe szyfrowanie pakietów **AES-256-CCM** z 4-bajtowym tagiem uwierzytelniającym MIC.
+- ⚡ **Wirtualna zmiana biegów (MyShift 30 przełożeń):** Zmiana przełożeń za pomocą łopatek lub przycisków `+` / `–` kontrolerów (bieg startowy: 15).
+- 🔒 **Bezpieczna komunikacja Bluetooth Low Energy (BLE):** Pełna obsługa szyfrowania i autoryzacji kontrolerów Zwift.
 - 🎮 **Automatyczne rozpoznawanie sprzętu:**
   - Podłączenie kontrolerów **Zwift Play** automatycznie aktywuje widok i mapowanie Zwift Play oraz blokuje profil Click.
   - Podłączenie kontrolerów **Zwift Click** automatycznie przełącza widok i mapowanie na Zwift Click oraz blokuje profil Play.
-- ⌨️ **DirectInput 60Hz Hardware Scan Codes:** Symulacja fizycznych wciśnięć klawiszy (Windows `SendInput`), działająca w 100% bezkolizyjnie z grami 3D.
+  - Sprzętowa identyfikacja profilu zapobiega pomyłkom i trwale zapamiętuje ustawienia po restarcie programu.
+- ⌨️ **Sprzętowe przekazywanie sygnałów do gry:** Brak opóźnień i bezkolizyjność z oknem gry MyWhoosh.
 - 🔊 **Realistyczny dźwięk kliku manetki:** Mechaniczny odgłos indeksowanej przerzutki rowerowej generowany w tle przy każdej zmianie biegu.
-- 📳 **Haptyka (wibracje):** Sygnalizacja zmiany przełożenia wibracją manetki Zwift.
-- 🪟 **Pływający mini-HUD:** Zawsze widoczne, półprzezroczyste okienko z aktualnym biegiem i poziomem baterii obu manetek podczas jazdy w MyWhoosh.
-- 🎨 **Interaktywny kokpit Rider's POV:** Wizualizacja kierownicy i manetek z perspektywy rowerzysty z podświetlaniem klikanych przycisków w czasie rzeczywistym.
+- 📳 **Haptyka (wibracje):** Sygnalizacja zmiany przełożenia wibracją manetki ze sprzętowym filtrem eliminującym podwójne zmiany biegów.
+- 🪟 **Pływający mini-HUD:** Zawsze widoczne, półprzezroczyste okienko (*Always-on-Top*) z aktualnym biegiem i poziomem baterii podczas jazdy.
+- 🎨 **Interaktywny kokpit Rider's POV:** Wizualizacja kierownicy i manetek z perspektywy rowerzysty z podświetlaniem klikanych przycisków na żywo.
 
 ---
 
 ## 3. Wymagania systemowe i sprzętowe
 
-- **System operacyjny:** Windows 10 (64-bit) lub Windows 11.
-- **Moduł Bluetooth:** Wbudowany moduł Bluetooth 4.0+ lub adapter Bluetooth USB BLE.
+- **System operacyjny:**
+  - **Windows:** Windows 10 (64-bit) lub Windows 11.
+  - **macOS:** macOS 12 (Monterey), macOS 13 (Ventura), macOS 14 (Sonoma), macOS 15 (Sequoia) lub nowszy. Działa natywnie na procesorach **Apple Silicon (M1, M2, M3, M4)** oraz **Intel**.
+- **Moduł Bluetooth:**
+  - Windows: Wbudowany moduł Bluetooth 4.0+ lub adapter USB BLE.
+  - macOS: Wbudowany moduł Bluetooth (CoreBluetooth).
 - **Kontrolery:**
-  - **Zwift Play** (lewa + prawa manetka montowane na kierownicy szosowej), LUB
-  - **Zwift Click** (pojedyncza manetka lub zestaw lewa + prawa montowane na obejmach).
-- **Gra:** MyWhoosh (wersja ze sklepu Microsoft Store lub instalator standalone MyWhoosh HD).
+  - **Zwift Play** (para kontrolerów na baranku kierownicy szosowej), LUB
+  - **Zwift Click** (pojedynczy pod lub para na obejmach).
+- **Gra:**
+  - Windows: MyWhoosh (wersja Microsoft Store lub instalator MyWhoosh HD).
+  - macOS: MyWhoosh (ze sklepu Mac App Store lub strona mywhoosh.com zainstalowana w `/Applications/MyWhoosh.app`).
 - **Trenażer (opcjonalnie):** Dowolny trenażer smart lub zestaw z pojedynczą zębatką Zwift Cog (14T).
 
 ---
 
 ## 4. Szybki start (Krok po kroku)
 
-1. **Uruchomienie:**
-   - Pobierz i uruchom plik `VeloBridge.exe` (lub użyj pliku wsadowego `Uruchom_VeloBridge.bat`).
-   - Program jest w 100% portable – nie wymaga instalatora ani uprawnień administratora.
-2. **Wybudzenie kontrolerów:**
-   - Naciśnij dowolny przycisk na manetkach Zwift Play lub Zwift Click.
-   - Diody LED na kontrolerach zaczną migać, sygnalizując gotowość do połączenia BLE.
-3. **Wykrycie i sparowanie:**
-   - Jeśli uruchamiasz program po raz pierwszy, kliknij **„Skaner BLE”** w karcie stanu połączenia.
-   - Kliknij **„🔍 Skanuj BLE”** – program wykryje Twoje manetki.
-   - Przypisz znalezione urządzenia jako Lewą i Prawą manetkę, a następnie kliknij **„✓ Zapisz i zastosuj”**.
-   - Adresy MAC zapiszą się w pliku `VeloBridge_config.json`.
-4. **Połączenie i start gry:**
-   - Kliknij duży przycisk **„⚡ Połącz i Uruchom MyWhoosh”**.
-   - Po 1–2 sekundach diody stanu połączenia zapalą się na zielono (**POŁĄCZONO I ZASZYFROWANO**), a obok pojawi się poziom naładowania baterii.
-   - VeloBridge automatycznie uruchomi grę MyWhoosh i aktywuje DirectInput.
-5. **Trening:**
-   - Rozpocznij jazdę w MyWhoosh. Wirtualne biegi MyShift działają od razu!
+### 4.1. System Windows
+1. Pobierz plik **`VeloBridge.exe`** z zakładki [Releases](../../releases).
+2. Uruchom pobrany plik `VeloBridge.exe`.
+3. Program jest aplikacją przenośną (portable) — nie wymaga instalatora ani uprawnień administratora.
 
 ---
 
-## 5. Konfiguracja ścieżki do gry MyWhoosh (Microsoft Store & MyWhoosh HD)
+### 4.2. System macOS (Instalacja i odblokowanie)
 
-VeloBridge posiada zaawansowany silnik automatycznego wykrywania gry MyWhoosh. Jednak w zależności od wersji systemu Windows i sposobu instalacji (Microsoft Store lub MyWhoosh HD), możesz chcieć wskazać własną ścieżkę lub skrót.
+1. **Pobranie aplikacji:**
+   - Ze strony repozytorium przejdź do zakładki [Releases](../../releases) i pobierz archiwum **`VeloBridge-macOS.zip`**.
+   - Rozpakuj pobrany plik zip (dwuklik w Finderze). Otrzymasz aplikację **`VeloBridge.app`**.
+   - Przeciągnij **`VeloBridge.app`** do katalogu **`/Applications`** (Programy).
 
-W sekcji stanu połączenia obok napisu *MyWhoosh (Gra)* kliknij przycisk **„📁 Ścieżka gry”**. Otworzy się dedykowane okno konfiguracji:
+2. **Pierwsze uruchomienie a blokada Gatekeepera (jednorazowo):**
+   - Ponieważ aplikacja jest darmowym programem bez płatnego certyfikatu Apple Developer ($99/rok), macOS przy zwykłym dwukliku może wyświetlić komunikat:  
+     *„Program pochodzi od niezidentyfikowanego dewelopera”*.
+   - **Jak odblokować:**
+     1. Otwórz folder **Programy (`/Applications`)** w programie Finder.
+     2. Kliknij na aplikację **VeloBridge** **prawym przyciskiem myszy** (lub przytrzymaj klawisz **Control** i kliknij lewym).
+     3. Z menu kontekstowego wybierz **Otwórz**.
+     4. W oknie ostrzeżenia kliknij przycisk **Otwórz**. macOS trwale zapamięta Twój wybór!
+
+---
+
+### 4.3. Wymagane uprawnienia w systemie macOS (BARDZO WAŻNE!)
+
+Aby VeloBridge mógł łączyć się przez Bluetooth i przesyłać wciśnięcia klawiszy zmiany biegów do okna gry MyWhoosh, system macOS wymaga nadania dwóch uprawnień:
+
+#### 1. Dostępność (Accessibility) — Klawisze w grze:
+macOS ze względów bezpieczeństwa blokuje aplikacjom symulowanie wciśnięć klawiatury bez wyraźnej zgody użytkownika. **Bez tego uprawnienia manetki połączą się z programem, ale gra MyWhoosh nie zareaguje na zmianę biegów!**
+- Otwórz: **`Ustawienia systemowe -> Prywatność i ochrona -> Dostępność`**.
+- Znajdź na liście **VeloBridge** i włącz przełącznik obok nazwy.
+
+#### 2. Dostęp do Bluetooth:
+- Przy pierwszym skanowaniu system zapyta o dostęp do Bluetooth — kliknij **Zezwól**.
+
+---
+
+### 4.4. Połączenie z manetkami i jazda w MyWhoosh
+
+1. **Wybudzenie kontrolerów:**
+   - Naciśnij dowolny przycisk na manetkach Zwift Play lub Zwift Click. Diody LED zaczną pulsować.
+2. **Wykrycie i sparowanie:**
+   - W oknie VeloBridge kliknij **„Zarządzaj manetkami & Skaner BLE”**.
+   - Kliknij **„🔍 Skanuj BLE”** – program przeszuka pasmo i wykryje Twoje manetki.
+   - Przypisz znalezione urządzenia (w przypadku Zwift Click wystarczy przypisać jedno urządzenie) i kliknij **„✓ Zapisz i zastosuj”**.
+   > [!NOTE]
+   > **Specyfika macOS (Identyfikatory UUID zamiast MAC):**  
+   > System macOS nie ujawnia fizycznych adresów MAC (`AA:BB:CC:DD:EE:FF`), lecz zastępuje je unikalnymi identyfikatorami UUID (np. `68840428-6604-4348-8C64-44DC7A8CE771`). VeloBridge automatycznie rozpoznaje i obsługuje te identyfikatory.
+3. **Połączenie i start gry:**
+   - Kliknij duży przycisk **„⚡ Połącz i Uruchom MyWhoosh”**.
+   - Po 1–2 sekundach diody stanu połączenia zapalą się na zielono (**POŁĄCZONO I ZASZYFROWANO**), a obok pojawi się stan baterii.
+   - VeloBridge automatycznie wybudzi lub uruchomi grę MyWhoosh.
+4. **Trening:**
+   - Rozpocznij jazdę. Wirtualne biegi oraz sterowanie działają natychmiast!
+
+---
+
+## 5. Konfiguracja ścieżki do gry MyWhoosh
+
+VeloBridge automatycznie wykrywa grę MyWhoosh na obu systemach. W razie potrzeby możesz wskazać własną ścieżkę klikając przycisk **„📁 Ścieżka gry”**:
 
 ### A. Wersja ze sklepu Microsoft Store (UWP / MSIX)
-Aplikacje instalowane z Microsoft Store znajdują się w zabezpieczonym folderze systemowym `C:\Program Files\WindowsApps`, do którego eksplorator plików blokuje bezpośredni dostęp. Aby wskazać grę w VeloBridge:
+- W oknie ścieżki kliknij **„📁 Przeglądaj...”** i wskaż skrót `.lnk` do gry przeciągnięty z Menu Start na Pulpit, LUB:
+- Pozostaw pole puste – VeloBridge automatycznie odpyta system Windows o identyfikator aplikacji Store.
 
-- **Metoda 1 — Przeciągnięcie z Menu Start (Najprostsza):**
-  1. Otwórz **Menu Start** w systemie Windows.
-  2. Wyszukaj lub znajdź na liście aplikacji pozycję **MyWhoosh**.
-  3. Kliknij i przytrzymaj lewym przyciskiem myszy ikonę MyWhoosh, a następnie **przeciągnij ją na Pulpit**.
-  4. System Windows automatycznie utworzy na Pulpicie skrót `.lnk` do gry.
-  5. W oknie VeloBridge kliknij **„📁 Przeglądaj...”** i wskaż utworzony skrót z Pulpitu!
-- **Metoda 2 — Folder powłoki shell:AppsFolder:**
-  1. Naciśnij skrót klawiaturowy `Win + R`.
-  2. Wpisz `shell:AppsFolder` i naciśnij `Enter` (otworzy się lista wszystkich zainstalowanych aplikacji Store).
-  3. Znajdź kafelek **MyWhoosh**, kliknij go prawym przyciskiem myszy i wybierz **„Utwórz skrót”** (Windows zapyta o umieszczenie go na pulpicie – zatwierdź).
-  4. Wskaż ten skrót w VeloBridge.
-- **Metoda 3 — Pełna automatyczna detekcja:**
-  - Jeśli nie wskażesz żadnej ścieżki (pole puste), VeloBridge automatycznie odpyta system Windows poprzez zapytanie PowerShell `Get-StartApps` o identyfikator aplikacji Store i uruchomi ją bezpośrednio przez protokół powłoki.
+### B. Wersja MyWhoosh HD / Standalone
+- Wskaż bezpośredni plik wykonywalny gry, np. `C:\Program Files\MyWhoosh\MyWhoosh.exe` lub `C:\Program Files\MyWhoosh HD\MyWhoosh.exe`.
 
-### B. Wersja MyWhoosh HD / Standalone (Instalator ze strony www)
-Jeśli pobrałeś grę jako instalator tradycyjny:
-1. W oknie VeloBridge kliknij **„📁 Przeglądaj...”**.
-2. Przejdź do folderu instalacji, np.:
-   - `C:\Program Files\MyWhoosh\MyWhoosh.exe`
-   - `C:\Program Files\MyWhoosh HD\MyWhoosh.exe`
-   - `C:\Users\<Twój_Użytkownik>\AppData\Local\MyWhoosh\...`
-3. Wybierz plik `.exe` gry (lub wskaż skrót `.lnk` z Pulpitu) i kliknij **„✓ Zapisz i zastosuj”**.
-
-> **Wskazówka:** W oknie konfiguracji ścieżki możesz w każdej chwili kliknąć przycisk **„🚀 Przetestuj uruchomienie”**, aby sprawdzić, czy gra otwiera się poprawnie, lub **„🔄 Wykrywaj automatycznie”**, aby przywrócić domyślne wyszukiwanie.
+### C. System macOS (Mac App Store & katalog /Applications)
+- Na komputerach Mac gra domyślnie instaluje się do głównego katalogu aplikacji: `/Applications/MyWhoosh.app`.
+- VeloBridge automatycznie odnajdzie grę w systemie. Możesz także kliknąć **„📁 Przeglądaj...”** i wskazać plik **`MyWhoosh.app`**.
 
 ---
 
@@ -116,7 +156,7 @@ Jeśli pobrałeś grę jako instalator tradycyjny:
 
 ### 🎮 Zestaw Zwift Play (Montowane na baranku kierownicy)
 
-| Kontroler | Przycisk / Element | Domyślna akcja VeloBridge | Klawisz w MyWhoosh (DirectInput) |
+| Kontroler | Przycisk / Element | Domyślna akcja VeloBridge | Klawisz w MyWhoosh |
 | :--- | :--- | :--- | :--- |
 | **Prawa manetka** | Łopatka górna / włącznik | **Bieg W GÓRĘ (+1)** | Klawisz `K` |
 | **Prawa manetka** | Przycisk Y (góra) | **Bieg W GÓRĘ (+1)** | Klawisz `K` |
@@ -147,90 +187,86 @@ Jeśli pobrałeś grę jako instalator tradycyjny:
 | **Lewa manetka** | Strzałka **Lewo** | **Kierunek w lewo** | Strzałka `Lewo` |
 | **Lewa manetka** | Strzałka **Prawo** | **Kierunek w prawo** | Strzałka `Prawo` |
 
-> **Własne mapowanie:** W oknie głównym aplikacji kliknij dowolny dymek z nazwą akcji na schemacie manetek, aby zmienić przypisanie na dowolną inną funkcję (np. zmiana kamery `C`, emotki `1`–`5`, podwójna redukcja biegów).
+### 🎨 Personalizacja przycisków
+W oknie głównym aplikacji kliknij dowolny dymek z nazwą akcji na interaktywnym schemacie kierownicy, aby przypisać inną funkcję (np. zmianę kamery `C`, emotki `1`–`5`, nawrót `U`).
 
 ---
 
-## 7. Plik konfiguracyjny (VeloBridge_config.json)
+## 7. Wskazówki dla zestawu Zwift Cog
 
-Wszystkie ustawienia programu są trwale przechowywane w czytelnym pliku formatu JSON o nazwie **`VeloBridge_config.json`**.
+- **Jedna fizyczna zębatka (Single Cog):** Ponieważ na trenażerze zamontowana jest jedna zębatka (14T), łańcuch pozostaje w idealnej linii, eliminując zużycie napędu i hałas.
+- **Wirtualne przełożenie:** Wszystkie zmiany biegów odbywają się programowo w MyWhoosh (funkcja MyShift).
+- **Zalecana tarcza z przodu:** Ustaw łańcuch na dużej tarczy (np. 50T lub 52T) na rowerze szosowym lub średniej/dużej tarczy na rowerze gravel/MTB. Zapewnia to optymalną prędkość obrotową koła zamachowego trenażera.
+
+---
+
+## 8. Plik konfiguracyjny (VeloBridge_config.json)
+
+Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przycisków są przechowywane w pliku JSON o nazwie **`VeloBridge_config.json`**.
 
 ### Lokalizacja pliku:
-1. **Tryb przenośny (Portable):** Bezpośrednio w katalogu z plikiem `VeloBridge.exe`.
-2. **Katalog danych użytkownika (Fallback):** `%APPDATA%\VeloBridge\VeloBridge_config.json`.
-
-*(Jeśli w katalogu znajdował się starszy plik `config.json`, program automatycznie migruje z niego wszystkie ustawienia i adresy MAC).*
-
-### Przykładowa zawartość:
-```json
-{
-    "device_mode": "Zestaw Zwift Play (Lewy + Prawy)",
-    "mac_right": "F5:9D:F1:42:AA:92",
-    "mac_left": "D7:A3:71:29:77:EC",
-    "min_gear": 1,
-    "max_gear": 30,
-    "initial_gear": 15,
-    "sound_enabled": true,
-    "haptic_enabled": true,
-    "mywhoosh_path": "C:\\Program Files\\MyWhoosh\\MyWhoosh.exe",
-    "mappings": { ... }
-}
-```
+1. **Windows:** Bezpośrednio obok pliku `VeloBridge.exe` (lub w `%APPDATA%\VeloBridge\`).
+2. **macOS:** W trwałym folderze użytkownika: `~/Library/Application Support/VeloBridge/VeloBridge_config.json` (plik jest zachowywany przy aktualizacjach aplikacji).
 
 ---
 
-## 8. Rozwiązywanie problemów (FAQ)
+## 9. Rozwiązywanie problemów (FAQ)
+
+### ❓ [macOS] Wyświetla się komunikat: *„Program VeloBridge nie może zostać otwarty, ponieważ pochodzi od niezidentyfikowanego dewelopera”*:
+- **Rozwiązanie:** Kliknij na plik `VeloBridge.app` w Finderze **prawym przyciskiem myszy (lub Control + klik)** i wybierz **Otwórz**, a następnie zatwierdź przyciskiem **Otwórz**.
+
+### ❓ [macOS] Manetki połączyły się (zielony status), ale gra MyWhoosh nie reaguje na wciskanie przycisków:
+- **Przyczyna:** Brak wymaganego uprawnienia systemowego Dostępności (*Accessibility*).
+- **Rozwiązanie:** Otwórz `Ustawienia systemowe -> Prywatność i ochrona -> Dostępność` i upewnij się, że przełącznik przy **VeloBridge** jest włączony. Po zmianie uprawnień zrestartuj aplikację.
 
 ### ❓ Manetki nie chcą się połączyć, a dioda LED cały czas miga:
 - **Przyczyna:** Manetki mogą być połączone z inną aplikacją w pobliżu (np. aplikacją Zwift lub Zwift Companion na smartfonie/tablecie).
-- **Rozwiązanie:** Wyłącz na chwilę Bluetooth w telefonie lub zamknij aplikację Zwift. Manetki BLE mogą utrzymywać aktywne połączenie tylko z jednym odbiornikiem jednocześnie.
+- **Rozwiązanie:** Wyłącz na chwilę Bluetooth w telefonie lub zamknij aplikację Zwift. Kontrolery BLE mogą utrzymywać połączenie tylko z jednym odbiornikiem jednocześnie.
 
-### ❓ Gra MyWhoosh nie reaguje na wciskanie przycisków zmiany biegów:
+### ❓ [Windows] Gra MyWhoosh nie reaguje na wciskanie przycisków zmiany biegów:
 - **Przyczyna:** Okno gry MyWhoosh nie jest oknem aktywnym na pierwszym planie Windows.
-- **Rozwiązanie:** Kliknij myszką wewnątrz okna gry MyWhoosh. VeloBridge wysyła kody DirectInput bezpośrednio do aktywnego okna.
+- **Rozwiązanie:** Kliknij myszką wewnątrz okna gry MyWhoosh. VeloBridge wysyła sygnały bezpośrednio do aktywnego okna.
 
 ### ❓ Prawa manetka redukuje biegi, a lewa wrzuca twardszy (odwrotne działanie):
 - **Rozwiązanie:** W karcie „STAN POŁĄCZENIA BLE” w stopce kliknij przycisk **„⇄ Zamień L ↔ P”**. Program natychmiast zamieni role kontrolerów bez potrzeby ponownego parowania.
 
 ### ❓ Jak zresetować ustawienia do fabrycznych?
-- Usuń plik `VeloBridge_config.json` z katalogu programu i uruchom VeloBridge ponownie.
+- **Windows:** Usuń plik `VeloBridge_config.json` z folderu programu.
+- **macOS:** Usuń plik `~/Library/Application Support/VeloBridge/VeloBridge_config.json`.
 
 ---
 
-## 9. Historia zmian (Changelog)
+## 10. Historia zmian (Changelog)
 
 ### Wersja 1.6
-- **Niezawodne definiowanie przycisków & eliminacja podwójnej zmiany biegów (`PRO v1.6`):**
-  - Wyeliminowano błąd braku działania zmienionych definicji przycisków w menu diagramu kokpitu. Procedura przypisywania (`_assign_action`) oraz generowania etykiet (`_create_callout`) jest teraz w 100% zsynchronizowana z aktywnym modelem manetek (`selected_hardware_model`), eliminując zapis do niewłaściwego profilu (`play` vs `click`).
-  - Wprowadzono sprzętowo-programowy filtr drgań styków (*Debounce* 150 ms na przycisk oraz 100 ms bufora kierunkowego w `VirtualShifter`), eliminujący podwójne zmiany biegów (+2 / -2) na przyciskach Y i B wywołane drganiami silniczka wibracyjnego (*Haptic Feedback*).
-  - Usunięto niepożądany fallback wymuszający redukcję biegów na wyłączonych przyciskach (`NONE`) oraz zapewniono pełną swobodę konfiguracji przycisków na obu manetkach.
+- **Pełna kompatybilność z systemem macOS (Apple Silicon M1–M4 & Intel):**
+  - Gotowa aplikacja `VeloBridge.app` zintegrowana z systemem dźwiękowym i powłoką macOS.
+  - Automatyczne wykrywanie instalacji gry MyWhoosh (`/Applications/MyWhoosh.app`).
+- **Eliminacja błędnej identyfikacji modeli (Zwift Click vs Play):**
+  - Sprzętowa identyfikacja profilu manetek i trwałe zapamiętywanie wybranego modelu po ponownym uruchomieniu aplikacji.
+- **Niezawodne definiowanie przycisków & eliminacja podwójnej zmiany biegów:**
+  - Pełna swoboda personalizacji akcji dla wszystkich przycisków manetek w graficznym kokpicie.
+  - Sprzętowy filtr drgań styków zapobiegający przypadkowym podwójnym kliknięciom wywołanym wibracjami.
 
 ### Wersja 1.5
-- **Poprawka stanu połączenia i synchronizacja baterii (`PRO v1.5`):** Wyeliminowano pozorny stan połączenia oraz fikcyjne odczyty baterii po uruchomieniu aplikacji przy wyłączonych manetkach. Okno „STAN POŁĄCZENIA” oraz górny pasek startują w stanie `○ MOST ROZŁĄCZONY` z wygaszonymi diodami oraz stanem baterii `🔋 --%`. Dodano automatyczne resetowanie baterii i wskaźników po rozłączeniu kontrolerów.
+- Wyeliminowano pozorny stan połączenia przy wyłączonych manetkach. Prawidłowy start w stanie rozłączenia i automatyczna synchronizacja wskaźników baterii z pływającym HUD.
 
 ### Wersja 1.4
-- **Ujednolicenie architektury i kompilacji (`PRO v1.4`):** Centralizacja wersjonowania, przenośna konfiguracja kompilacji `PyInstaller` oraz rozbudowany pakiet 21 testów jednostkowych obejmujących kryptografię, protokół BLE, stabilność sesji GATT i sterowanie MyWhoosh.
+- Zwiększona stabilność połączeń Bluetooth Low Energy, ujednolicony interfejs kokpitu i zoptymalizowana obsługa profili urządzeń.
 
 ### Wersja 1.3
-- **Obsługa przycisku Menu / Pauzy w MyWhoosh:** Wielowarstwowe wybudzanie i klikanie przycisku Menu na HUD MyWhoosh (z automatycznym przywróceniem kursora myszy), wysyłanie hybrydowego kodu `ESC` (`ScanCode 0x01` + `VK_ESCAPE 0x1B` + `PostMessage`) oraz nowe akcje w mapowaniu: *Pauza treningu (Spacja)* i *Menu + Pauza treningu*.
-- **Automatyczne przekazywanie fokusu do okna MyWhoosh (`AttachThreadInput`):** Gwarantuje, że skróty klawiszowe i zmiana biegów trafiają bezpośrednio do gry nawet wtedy, gdy wcześniej kliknięto poza okno MyWhoosh.
-- **Stabilność połączenia BLE i Auto-Reconnect:** Automatyczne wznawianie zerwanego połączenia z kontrolerami w tle bez przerywania treningu, kaskadowe łączenie manetek Zwift Play zapobiegające kolizjom adaptera Bluetooth, aktywny pakiet podtrzymujący połączenie (*Keepalive* co 45s) oraz blokada współbieżnych zapisów GATT i debouncing wibracji.
-
-### Wersja 1.2
-- **Konfigurator ścieżki do gry MyWhoosh (`📁 Ścieżka gry`):** Dedykowane okno wyboru i testowania ścieżki `.exe` lub skrótu `.lnk` (obsługa wersji Microsoft Store, `shell:AppsFolder` oraz MyWhoosh HD) z zapisem w `VeloBridge_config.json`.
-- **Uporządkowany interfejs użytkownika:** Nowe logo i ikona programu, przycisk wsparcia projektu w prawym dolnym rogu kokpitu oraz usprawniony pasek nagłówkowy.
-
-### Wersja 1.1
-- **Pełna obsługa zestawu Zwift Click (Lewa + Prawa) oraz Zwift Play:** Automatyczne rozpoznawanie podłączonego modelu kontrolerów, automatyczne przełączanie wizualizacji i blokowanie nieaktywnego profilu sprzętowego, obsługa parowania mostkowego Zwift Click oraz dekodowanie pakietów `0x23` / `0x07` i filtracja pakietów *Heartbeat* (`0x15` / `0x19`).
+- Wielowarstwowa obsługa przycisku Menu / Pauzy w grze MyWhoosh (automatyczne wybudzanie paska gry i klikanie menu).
+- Automatyczne przekazywanie fokusu do okna MyWhoosh podczas jazdy.
+- Automatyczne wznawianie zerwanych połączeń BLE (*Auto-Reconnect*).
 
 ---
 
-## 10. Wsparcie projektu
+## 11. Wsparcie projektu
 
-Projekt **VeloBridge** jest tworzony i rozwijany z pasji do kolarstwa wirtualnego, treningu na trenażerze i inżynierii wstecznej Bluetooth Low Energy.
+Projekt **VeloBridge** jest tworzony i rozwijany z pasji do kolarstwa wirtualnego i treningu na trenażerze.
 
 Jeśli program jest dla Ciebie przydatny i uprzyjemnia Ci treningi w MyWhoosh, możesz postawić autorowi wirtualną kawę:
 
-☕ **[Postaw kawę na buycoffee.to/mkola](https://buycoffee.to/mkola)**
+☕ **[buycoffee.to/mkola](https://buycoffee.to/mkola)**
 
 Dziękuję za każde wsparcie i do zobaczenia na wirtualnych trasach! 🚴💨
