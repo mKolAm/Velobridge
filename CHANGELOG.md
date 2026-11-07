@@ -4,6 +4,24 @@ Wszystkie istotne zmiany, usprawnienia oraz poprawki wprowadzone w projekcie zos
 
 ---
 
+## [1.6.0] - Poprawka mapowania definicji przycisków i eliminacja podwójnej zmiany biegów (PRO v1.6)
+
+### 🐛 Poprawki błędów i niezawodność sterowania
+- **Naprawa zapisywania i wykonywania własnych definicji przycisków:**
+  - Rozwiązano problem nieskutecznej zmiany definicji akcji przycisków w menu diagramu kokpitu. Procedura przypisywania (`_assign_action`) oraz generowania etykiet (`_create_callout`) jest teraz w 100% zsynchronizowana z aktywnym modelem sprzętowym (`selected_hardware_model`), eliminując zapis do niewłaściwego profilu (`play` vs `click`).
+  - Usunięto agresywny mechanizm fallback w obsłudze przycisków, który wymuszał redukcję biegu (`SHIFT_DOWN`) na przyciskach wyłączonych (`NONE`) lub niewyszukanych w profilu domyślnym. Wybranie opcji `Brak akcji (Wyłączony)` jest teraz ściśle respektowane.
+- **Eliminacja podwójnej zmiany biegów na prawej manetce (przyciski Y i B):**
+  - Wprowadzono sprzętowo-programowy filtr drgań styków (*Debounce* 150 ms) dla każdego przycisku fizycznego oraz wewnętrzny bufor czasowy w silniku zmiany biegów (`VirtualShifter`), zapobiegając wielokrotnemu rejestrowaniu pojedynczego kliknięcia wywołanemu mechanicznym rezonansem silniczka wibracyjnego (*Haptic Feedback*) umieszczonego w korpusie prawej manetki.
+  - Naprawiono pętlę rozpakowywania stanów przycisków w pakietach wielostanowych BLE (kod operacji `0x23`), gwarantując niezależne przypisanie roli (`left` i `right`) i eliminując sztuczne naprzemienne zdarzenia wciśnięcia/zwolnienia.
+- **Weryfikacja i synchronizacja zmiany biegów na lewej manetce:**
+  - Zapewniono jednoznaczne mapowanie kierunków zmiany biegów: Strzałka w górę (▲) -> `SHIFT_UP` (+1 bieg), Strzałka w dół (▼) oraz łopatka -> `SHIFT_DOWN` (-1 bieg).
+  - Wprowadzono pełną swobodę przedefiniowania dowolnego przycisku lewej manetki na sterowanie (skręt w lewo/prawo, pauza, kamera, etc.).
+- **Rozbudowa pakietu testów jednostkowych (`23/23 testów OK`):**
+  - Dodano `test_virtual_shifter_debounce_prevents_double_shift` (test filtra drgań styków zapobiegającego podwójnej zmianie biegów).
+  - Dodano `test_button_redefinition_and_execution_logic` (test separacji profili modeli Play i Click oraz izolacji definicji przycisków).
+
+---
+
 ## [1.5.0] - Poprawka stanu połączenia i synchronizacja baterii (PRO v1.5)
 
 ### 🐛 Poprawki błędów i synchronizacja UI

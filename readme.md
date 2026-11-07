@@ -199,6 +199,12 @@ Wszystkie ustawienia programu są trwale przechowywane w czytelnym pliku formatu
 
 ## 9. Historia zmian (Changelog)
 
+### Wersja 1.6
+- **Niezawodne definiowanie przycisków & eliminacja podwójnej zmiany biegów (`PRO v1.6`):**
+  - Wyeliminowano błąd braku działania zmienionych definicji przycisków w menu diagramu kokpitu. Procedura przypisywania (`_assign_action`) oraz generowania etykiet (`_create_callout`) jest teraz w 100% zsynchronizowana z aktywnym modelem manetek (`selected_hardware_model`), eliminując zapis do niewłaściwego profilu (`play` vs `click`).
+  - Wprowadzono sprzętowo-programowy filtr drgań styków (*Debounce* 150 ms na przycisk oraz 100 ms bufora kierunkowego w `VirtualShifter`), eliminujący podwójne zmiany biegów (+2 / -2) na przyciskach Y i B wywołane drganiami silniczka wibracyjnego (*Haptic Feedback*).
+  - Usunięto niepożądany fallback wymuszający redukcję biegów na wyłączonych przyciskach (`NONE`) oraz zapewniono pełną swobodę konfiguracji przycisków na obu manetkach.
+
 ### Wersja 1.5
 - **Poprawka stanu połączenia i synchronizacja baterii (`PRO v1.5`):** Wyeliminowano pozorny stan połączenia oraz fikcyjne odczyty baterii po uruchomieniu aplikacji przy wyłączonych manetkach. Okno „STAN POŁĄCZENIA” oraz górny pasek startują w stanie `○ MOST ROZŁĄCZONY` z wygaszonymi diodami oraz stanem baterii `🔋 --%`. Dodano automatyczne resetowanie baterii i wskaźników po rozłączeniu kontrolerów.
 
