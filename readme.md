@@ -14,6 +14,7 @@
    - [4.2. System macOS (Instalacja i odblokowanie)](#42-system-macos-instalacja-i-odblokowanie)
    - [4.3. Wymagane uprawnienia w systemie macOS](#43-wymagane-uprawnienia-w-systemie-macos-bardzo-ważne)
    - [4.4. Połączenie z manetkami i jazda w MyWhoosh](#44-połączenie-z-manetkami-i-jazda-w-mywhoosh)
+   - [4.5. Manetki Zwift Click v2 — Wymóg autoryzacji (Procedura 24h Unlock)](#45-manetki-zwift-click-v2--wymóg-autoryzacji-procedura-24h-unlock)
 5. [Konfiguracja ścieżki do gry MyWhoosh](#5-konfiguracja-ścieżki-do-gry-mywhoosh)
    - [A. Windows (Microsoft Store)](#a-wersja-ze-sklepu-microsoft-store-uwp--msix)
    - [B. Windows (MyWhoosh HD / Standalone)](#b-wersja-mywhoosh-hd--standalone)
@@ -135,6 +136,29 @@ macOS ze względów bezpieczeństwa blokuje aplikacjom symulowanie wciśnięć k
 
 ---
 
+<a id="45-manetki-zwift-click-v2--wymóg-autoryzacji-procedura-24h-unlock"></a>
+<a id="45-manetki-zwift-click-v2"></a>
+### 4.5. Manetki Zwift Click v2 — Wymóg autoryzacji (Procedura 24h Unlock)
+
+W manetkach **Zwift Click v2** producent (Zwift) wprowadził w oprogramowaniu układowym (firmware) sprzętowe zabezpieczenie autoryzacyjne oparte o kryptografię asymetryczną.
+
+> [!IMPORTANT]
+> **Zależność od wersji firmware:**  
+> We wczesnych partiach sprzętu pojedyncza prawa manetka mogła działać autonomicznie bez kontaktu ze Zwiftem. W nowszych wersjach firmware producent wprowadził restrykcyjny timer sprzętowy (watchdog) — bez autoryzacji manetka rozłącza połączenie BLE (LL_TERMINATE_IND) dokładnie po **60 sekundach**, niezależnie od tego, czy używasz jednej, czy obu manetek.
+
+#### Procedura autoryzacji (24h Unlock):
+Aby manetki nie wyłączały się po minucie, raz na dobę należy wykonać szybką autoryzację:
+1. Uruchom oficjalną aplikację **Zwift** (na komputerze lub telefonie; wystarczy bezpłatne konto).
+2. Na ekranie urządzeń połącz manetki **Zwift Click v2** na **15–30 sekund** (aż pojawi się zielony znacznik połączenia).
+3. **Zamknij całkowicie aplikację Zwift** (upewnij się, że proces nie działa w tle).
+4. Uruchom **VeloBridge** — manetki zachowują ważność autoryzacji przez 24 godziny i nie rozłączą się podczas treningu!
+
+> [!NOTE]
+> **Dlaczego VeloBridge nie może sam udawać serwera Zwift?**  
+> Zwift zabezpieczył zestaw manetek kryptografią asymetryczną z cyfrowym podpisem (PKI). W procesorze manetki zaszyty jest klucz publiczny Zwifta, a podpis generowany jest przez prywatny klucz na zabezpieczonych serwerach w chmurze secure.zwift.com. Żaden program zewnętrzny (w tym OpenBikeControl, indieVelo itp.) nie posiada klucza prywatnego Zwifta, dlatego jednorazowa 15-sekundowa autoryzacja w oficjalnej aplikacji jest jedynym sposobem na odblokowanie manetek.
+
+---
+
 ## 5. Konfiguracja ścieżki do gry MyWhoosh
 
 VeloBridge automatycznie wykrywa grę MyWhoosh na obu systemach. W razie potrzeby możesz wskazać własną ścieżkę klikając przycisk **„📁 Ścieżka gry”**:
@@ -212,6 +236,11 @@ Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przyciskó
 
 ## 9. Rozwiązywanie problemów (FAQ)
 
+### ❓ [Zwift Click v2] Manetka wyłącza się po około 1 minucie (60 sekundach) jazdy:
+- **Przyczyna:** W nowszych wersjach oprogramowania (firmware) Zwift Click v2 wbudowany jest 60-sekundowy watchdog sprzętowy, który odcina połączenie BLE, jeśli manetka nie została autoryzowana w oficjalnej aplikacji Zwift w ciągu ostatnich 24 godzin (dotyczy to zarówno pojedynczej, jak i obu manetek).
+- **Rozwiązanie:** Przeprowadź szybką procedurę [**24h Unlock** (punkt 4.5)](#45-manetki-zwift-click-v2--wymóg-autoryzacji-procedura-24h-unlock): połącz manetki na 15–30 sekund w oficjalnej aplikacji Zwift, zamknij aplikację Zwift i wróć do VeloBridge. Przez kolejne 24 godziny połączenie nie zostanie przerwane.
+
+
 ### ❓ [macOS] Wyświetla się komunikat: *„Program VeloBridge nie może zostać otwarty, ponieważ pochodzi od niezidentyfikowanego dewelopera”*:
 - **Rozwiązanie:** Kliknij na plik `VeloBridge.app` w Finderze **prawym przyciskiem myszy (lub Control + klik)** i wybierz **Otwórz**, a następnie zatwierdź przyciskiem **Otwórz**.
 
@@ -237,6 +266,10 @@ Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przyciskó
 ---
 
 ## 10. Historia zmian (Changelog)
+
+### Wersja 1.6.1 (Najnowsza)
+- **Poprawka symulacji klawiatury na macOS w trybie pełnoekranowym:** Bezpośrednie przekazywanie zdarzeń do procesu MyWhoosh (CGEventPostToPid), przejście na kolejkę sesji (kCGSessionEventTap) oraz dołączanie znaków Unicode dla silnika Unreal Engine.
+- **Asystent uprawnień Dostępności (Accessibility):** Automatyczna detekcja i okno pomocnicze na macOS ułatwiające nadanie oraz odświeżenie uprawnień TCC.
 
 ### Wersja 1.6
 - **Pełna kompatybilność z systemem macOS (Apple Silicon M1–M4 & Intel):**

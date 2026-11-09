@@ -4,6 +4,18 @@ Wszystkie istotne zmiany, usprawnienia oraz poprawki wprowadzone w aplikacji zos
 
 ---
 
+## [1.6.1] - Poprawka przekazywania klawiszy w trybie pełnoekranowym i asystent uprawnień macOS
+
+### 🐛 Poprawki błędów i usprawnienia macOS
+- **Naprawa wysyłania zdarzeń klawiatury w trybie pełnoekranowym na macOS:**
+  - Przejście na standardowy kanał sesji użytkownika (kCGSessionEventTap = 1) oraz bezpośrednią iniekcję do kolejki procesu MyWhoosh (CGEventPostToPid). Rozwiązuje to problem blokowania sygnałów w grze uruchomionej na pełnym ekranie bez zewnętrznego monitora.
+  - Dołączanie ciągów znaków Unicode (CGEventKeyboardSetUnicodeString) do zdarzeń klawiszy K i I, co gwarantuje pełne rozpoznanie akcji przez silnik 3D Unreal Engine gry MyWhoosh.
+  - Zastosowanie natywnego profilu sprzętowego kCGEventSourceStateCombinedSessionState.
+- **Asystent uprawnień Dostępności w interfejsie graficznym:**
+  - Dodano automatyczne okno dialogowe informujące użytkownika o braku uprawnień Dostępności (Accessibility) oraz wyjaśniające konieczność odświeżenia suwaka po aktualizacji programu.
+
+---
+
 ## [1.6.0] - Obsługa macOS, poprawka mapowania przycisków i eliminacja podwójnej zmiany biegów
 
 ### ✨ Nowe funkcje i wsparcie platform
