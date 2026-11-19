@@ -4,6 +4,20 @@ Wszystkie istotne zmiany, usprawnienia oraz poprawki wprowadzone w aplikacji zos
 
 ---
 
+## [1.7.0] - Zwift Click v1 oraz Uniwersalny Moduł Kontrolerów Bluetooth (Cycplus BC2 / Piloty HID)
+
+### ✨ Nowe funkcje i wsparcie sprzętowe
+- **Pełna, automatyczna obsługa Zwift Click v1 (2 przyciski `+` / `−`):**
+  - Dodano dekoder nieszyfrowanych pakietów Protobuf `0x37` (`ClickKeyPadStatus`) oraz czysty handshake `RideOn` (bez zbędnego oczekiwania na szyfrowanie ECDH i bez wymogu procedury 24h Unlock w Zwift).
+  - Automatyczne rozpoznawanie generacji Click v1 vs Click v2 na podstawie struktury GATT oraz przychodzących pakietów (z dwukierunkową autokorektą).
+  - Automatyczne przełączanie kokpitu na 2-przyciskowy schemat **Zwift Click v1 (`+` / `−`)** oraz skrócenie kreatora diagnostyki z 10 do 2 kroków.
+- **Uniwersalny Moduł Kontrolerów Bluetooth (`🎛️ Inny BT / Pilot`):**
+  - **Tryb 1 — Manetki BLE GATT (Tryb Nauki):** obsługa kontrolerów innych producentów, takich jak **Cycplus BC2**, **ThinkRider VS200** oraz urządzeń zgodnych ze standardem **OpenBikeControl** (`d273f680-...`). Aplikacja automatycznie subskrybuje kanały Notify/Indicate i pozwala w kilka sekund „nauczyć” dowolny przycisk BLE (zapamiętuje parę `UUID + payload hex`).
+  - **Tryb 2 — Pilot BT / HID (Tryb Nauki):** obsługa tanich pilotów multimedialnych Bluetooth na kierownicę, pierścieni selfie/TikTok oraz klawiatur BT sparowanych z systemem Windows.
+  - **Tłumienie klawiszy systemowych (Windows):** opcjonalna blokada oryginalnego działania przechwyconego klawisza (np. `Volume Up`/`Volume Down` na pilocie BT zmienia wyłącznie biegi w MyWhoosh i nie podgłaśnia systemu Windows).
+
+---
+
 ## [1.6.1] - Poprawka przekazywania klawiszy w trybie pełnoekranowym i asystent uprawnień macOS
 
 ### 🐛 Poprawki błędów i usprawnienia macOS

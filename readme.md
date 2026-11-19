@@ -1,7 +1,7 @@
 ﻿# 🚴 VeloBridge - Virtual Shifting dla MyWhoosh (Windows & macOS)
 ### Kompleksowy podręcznik użytkownika, instrukcja konfiguracji i opis możliwości
 
-**VeloBridge** to lekka, samodzielna aplikacja typu **portable (bez konieczności instalacji)** dla systemów **Windows** oraz **macOS**, która pozwala wykorzystać bezprzewodowe kontrolery **Zwift Play** oraz **Zwift Click** do wirtualnej zmiany biegów (**Virtual Shifting / MyShift**) oraz pełnego sterowania w grze **MyWhoosh**.
+**VeloBridge** to lekka, samodzielna aplikacja typu **portable (bez konieczności instalacji)** dla systemów **Windows** oraz **macOS**, która pozwala wykorzystać bezprzewodowe kontrolery **Zwift Play**, **Zwift Click v1 / v2** oraz **inne przyciski i piloty Bluetooth (np. Cycplus BC2, ThinkRider VS200, piloty multimedialne BT/HID)** do wirtualnej zmiany biegów (**Virtual Shifting / MyShift**) oraz pełnego sterowania w grze **MyWhoosh**.
 
 ---
 
@@ -67,7 +67,10 @@ Dzięki temu możesz natychmiast korzystać z wirtualnej zmiany biegów (**Virtu
   - macOS: Wbudowany moduł Bluetooth (CoreBluetooth).
 - **Kontrolery:**
   - **Zwift Play** (para kontrolerów na baranku kierownicy szosowej), LUB
-  - **Zwift Click** (pojedynczy pod lub para na obejmach).
+  - **Zwift Click v2** (zestaw lewa + prawa manetka na obejmach), LUB
+  - **Zwift Click v1** (pojedyncza 2-przyciskowa manetka `+` / `−`, wykrywana automatycznie), LUB
+  - **Inne manetki BLE GATT** (np. **Cycplus BC2**, **ThinkRider VS200**, **OpenBikeControl**) przez wbudowany **Tryb Nauki BLE**, LUB
+  - **Dowolny pilot Bluetooth HID / multimedialny** (piloty na kierownicę, selfie, klawiatury BT) przez **Tryb Nauki HID**.
 - **Gra:**
   - Windows: MyWhoosh (wersja Microsoft Store lub instalator MyWhoosh HD).
   - macOS: MyWhoosh (ze sklepu Mac App Store lub strona mywhoosh.com zainstalowana w `/Applications/MyWhoosh.app`).
@@ -267,7 +270,13 @@ Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przyciskó
 
 ## 10. Historia zmian (Changelog)
 
-### Wersja 1.6.1 (Najnowsza)
+### Wersja 1.7.0 (Najnowsza)
+- **Automatyczna obsługa Zwift Click v1 (2 przyciski `+` / `−`):** Dekoder pakietów `0x37`, bezpośredni handshake `RideOn` (bez wymogu 24h Unlock), automatyczne przełączanie kokpitu na 2-przyciskowy widok oraz 2-krokowa diagnostyka.
+- **Uniwersalny Moduł Kontrolerów Bluetooth (`🎛️ Inny BT / Pilot`):**
+  - **Tryb Nauki BLE GATT:** obsługa manetek firm trzecich (m.in. **Cycplus BC2**, **ThinkRider VS200**, **OpenBikeControl**) poprzez automatyczną subskrypcję kanałów BLE i zapis sygnatur przycisków.
+  - **Tryb Nauki Pilot BT / HID:** obsługa pilotów multimedialnych na kierownicę i klawiatur BT z opcjonalnym tłumieniem oryginalnego działania klawiszy w Windows (np. blokada zmiany głośności).
+
+### Wersja 1.6.1
 - **Poprawka symulacji klawiatury na macOS w trybie pełnoekranowym:** Bezpośrednie przekazywanie zdarzeń do procesu MyWhoosh (CGEventPostToPid), przejście na kolejkę sesji (kCGSessionEventTap) oraz dołączanie znaków Unicode dla silnika Unreal Engine.
 - **Asystent uprawnień Dostępności (Accessibility):** Automatyczna detekcja i okno pomocnicze na macOS ułatwiające nadanie oraz odświeżenie uprawnień TCC.
 
