@@ -4,13 +4,40 @@ Wszystkie istotne zmiany, usprawnienia oraz poprawki wprowadzone w aplikacji zos
 
 ---
 
+## [1.8.6] - Diagnostyka BLE Click v2 oraz aktualizacja instrukcji 24h Unlock
+
+### ✨ Usprawnienia i dokumentacja
+- **Aktualizacja instrukcji 24h Unlock dla Zwift Click v2:** Doprecyzowano w `README.md`, `POMOC_I_INSTRUKCJA_GITHUB.md` oraz w oknie `❓ Pomoc`, aby podczas autoryzacji na darmowym koncie Zwift poklikać przez 15–30 s przyciski w menu gry (np. `B` jako Wstecz) na docelowym komputerze oraz że zgaśnięcie diod LED po chwili jest normalnym oszczędzaniem baterii.
+- **Usprawnienia diagnostyki BLE (`src/ble_worker.py`):** Wykrywanie cichych rozłączeń w `_keepalive_loop`, cykliczne odświeżanie `RideOn` dla Click v2, logowanie `button_rx_count` / `heartbeat_rx_count` / `handshake_resp_hex` oraz zapis nieznanych pakietów `PACKET_UNPARSED` i wersji aplikacji w widocznym logu.
+
+---
+
+## [1.8.0] - Kalibracja przycisków HUD MyWhoosh (Menu, Resume Ride, Kamera, Rozjazdy, Emotki)
+
+### ✨ Nowe funkcje
+- **System Kalibracji HUD (`🎯 Kalibracja HUD`):**
+  - Dodano okno `HudCalibrationDialog` (unoszące się zawsze na wierzchu nad oknem gry) umożliwiające wskazanie jednym kliknięciem pozycji elementów interfejsu MyWhoosh na ekranie (`🎯 Wskaż`) oraz ich natychmiastowe przetestowanie (`▶ Test`).
+  - Pozycje zapisywane są proporcjonalnie do rozmiaru okna gry w sekcji `hud_points` w `VeloBridge_config.json`, dzięki czemu działają niezależnie od rozdzielczości i trybu okna.
+- **Nowe makra klikające HUD (`HUD Klik: ...`) do przypisania pod dowolny przycisk manetki:**
+  - **Menu / Pauza (`HUD_MENU`)** oraz **Wznów jazdę / Resume Ride (`HUD_RESUME`)** na ekranie pauzy.
+  - **Trzy kreski `☰` (`HUD_THREE_BARS`)** oraz **2-etapowa zmiana kamery (`HUD_CAMERA`)** — automatyczne rozwinięcie paska `☰` i kliknięcie wybranego widoku po 250 ms.
+  - **Rozjazdy na skrzyżowaniach:** **Skręt w LEWO (`HUD_TURN_LEFT`)** oraz **Skręt w PRAWO (`HUD_TURN_RIGHT`)**.
+  - **Nawrót / U-Turn (`HUD_UTURN`)**, **Otwarcie koła emotek (`HUD_EMOTE`)** oraz **2-etapowe Emotki (`HUD_EMOTE_1`, `HUD_EMOTE_2`)** — otwarcie koła emotek i automatyczne kliknięcie wybranej reakcji.
+
+### 🧹 Uporządkowanie interfejsu i poprawki
+- **Przejrzysta lista akcji manetek:** Usunięto z menu przypisywania przycisków niedziałające na PC skróty klawiaturowe MyWhoosh — pozostały wyłącznie działające opcje zmiany biegów (`+1`, `-1`, `+2`, `-2`) oraz makra `HUD Klik: ...`.
+- **Niezawodne wykrywanie okna MyWhoosh (`find_mywhoosh_window`):** Wykluczono przeglądarki internetowe (np. karty z napisem „MyWhoosh”) oraz okna pomocnicze mniejsze niż `200×200 px`.
+- **Poprawka kliknięć w Unreal Engine:** Zastosowano `SendInput` (`INPUT_MOUSE` + `MOUSEEVENTF_ABSOLUTE`) z czasem wybudzenia HUD (`120 ms`), bez blokującego `AttachThreadInput`, oraz wykonywaniem makr HUD w głównym wątku GUI.
+
+---
+
 ## [1.7.1] - Szyfrowane logi diagnostyczne (.vblog) oraz poprawka Auto-Reconnect
 
 ### ✨ Nowe funkcje
 - **Szyfrowane logowanie problemów (`🐞 Log problemu`):**
   - Dodano przycisk `🐞 Log problemu` w panelu **OPCJE & LIVE MONITOR** oraz okno eksportu zaszyfrowanych raportów diagnostycznych `.vblog` (AES-256-GCM + kompresja `zlib`).
   - Aplikacja stale buforuje w pamięci szczegółową telemetrię połączeń BLE: wykryte modele i wersje kontrolerów, usługi/charakterystyki GATT, czas pracy przed rozłączeniem, błędy `keepalive`, próby `Auto-Reconnect`, poziom baterii i siłę sygnału `RSSI`.
-  - Dodano instrukcję zgłaszania problemów w oknie Pomocy (`❓ Pomoc`), `readme.md` oraz `POMOC_I_INSTRUKCJA_GITHUB.md`.
+  - Dodano instrukcję zgłaszania problemów w oknie Pomocy (`❓ Pomoc`), `README.md` oraz `POMOC_I_INSTRUKCJA_GITHUB.md`.
 
 ### 🐛 Poprawki błędów i stabilność BLE
 - **Naprawa pętli `Auto-Reconnect`:** Nieudana próba ponownego połączenia (`is_reconnect=True`) nie anuluje już zadania `_auto_reconnect`, dzięki czemu aplikacja cierpliwie wznawia próby aż do powrotu lub wybudzenia manetki.

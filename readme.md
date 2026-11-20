@@ -151,10 +151,10 @@ W manetkach **Zwift Click v2** producent (Zwift) wprowadził w oprogramowaniu uk
 
 #### Procedura autoryzacji (24h Unlock):
 Aby manetki nie wyłączały się po minucie, raz na dobę należy wykonać szybką autoryzację:
-1. Uruchom oficjalną aplikację **Zwift** (na komputerze lub telefonie; wystarczy bezpłatne konto).
-2. Na ekranie urządzeń połącz manetki **Zwift Click v2** na **15–30 sekund** (aż pojawi się zielony znacznik połączenia).
+1. Uruchom oficjalną aplikację **Zwift** (na tym samym komputerze, na którym będziesz używać VeloBridge; wystarczy bezpłatne konto — nie trzeba zaczynać jazdy ani mieć płatnego abonamentu).
+2. Na ekranie urządzeń połącz manetki **Zwift Click v2**, a następnie **przez 15–30 sekund użyj przycisków w menu Zwift** (np. nawigacji lub `B` jako „Wstecz”), aby zapisał się pełny token odblokowania.
 3. **Zamknij całkowicie aplikację Zwift** (upewnij się, że proces nie działa w tle).
-4. Uruchom **VeloBridge** — manetki zachowują ważność autoryzacji przez 24 godziny i nie rozłączą się podczas treningu!
+4. Uruchom **VeloBridge** — manetki zachowują ważność autoryzacji przez 24 godziny. **Uwaga:** zgaśnięcie niebieskich diod LED na Click v2 po kilkudziesięciu sekundach jest normalnym trybem oszczędzania baterii i nie oznacza rozłączenia — przyciski nadal działają!
 
 > [!NOTE]
 > **Dlaczego VeloBridge nie może sam udawać serwera Zwift?**  
@@ -275,9 +275,26 @@ Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przyciskó
 
 ---
 
+## 9a. Kalibracja przycisków HUD MyWhoosh (`🎯 Kalibracja HUD`)
+
+Ponieważ MyWhoosh na PC ignoruje większość skrótów klawiaturowych poza zmianą biegów (`I` / `K`), VeloBridge v1.8.0 umożliwia automatyczne klikanie przycisków na ekranie gry za pomocą manetki:
+1. Uruchom MyWhoosh i kliknij **`🎯 Kalibracja HUD`** w górnym pasku VeloBridge (okno kalibracji zawsze unosi się nad grą).
+2. Przy wybranym punkcie (np. **Menu / Pauza**, **Wznów jazdę (Resume Ride)**, **Trzy kreski (☰)**, **Kamera / Widok**, **Rozjazd w LEWO / PRAWO**, **Emotki**) kliknij **`🎯 Wskaż`**, a następnie kliknij lewym przyciskiem myszy odpowiedni element w oknie MyWhoosh.
+3. Sprawdź działanie przyciskiem **`▶ Test`** — kursor przeskoczy na wskazaną ikonę i wykona kliknięcie.
+4. W głównym oknie VeloBridge przypisz wybrane akcje **`HUD Klik: ...`** do przycisków swoich manetek.
+5. **Akcje 2-etapowe:** `HUD Klik: Zmień kamerę` automatycznie klika najpierw `☰`, a potem wybrany widok; podobnie `HUD Klik: Emotka #1` / `#2` otwiera koło emotek i klika wybraną reakcję.
+
+---
+
 ## 10. Historia zmian (Changelog)
 
-### Wersja 1.7.1 (Najnowsza)
+### Wersja 1.8.0 (Najnowsza)
+- **System Kalibracji HUD MyWhoosh (`🎯 Kalibracja HUD`):** Okno kalibracji unoszące się nad grą z funkcjami `🎯 Wskaż` oraz `▶ Test` i proporcjonalnym zapisem współrzędnych w `VeloBridge_config.json`.
+- **Nowe makra `HUD Klik: ...`:** Obsługa **Menu / Pauza**, **Wznów jazdę (Resume Ride)**, **Trzy kreski (`☰`)**, **2-etapowej zmiany kamery (`☰ → Widok`)**, **Rozjazdów (Skręt w Lewo / Prawo)**, **U-Turn** oraz **2-etapowych Emotek (`Emotki → Ikona 1 / 2`)**.
+- **Uporządkowana lista akcji:** Usunięto z menu niedziałające skróty klawiaturowe, zostawiając wyłącznie zmianę biegów i makra HUD.
+- **Poprawki wykrywania okna i kliknięć (`SendInput`):** Wykluczenie przeglądarek z `find_mywhoosh_window()` oraz niezawodne klikanie w interfejs Unreal Engine.
+
+### Wersja 1.7.1
 - **Zaszyfrowane logowanie problemów (`🐞 Log problemu`):** Dodano przycisk w panelu głównym oraz okno eksportu zaszyfrowanych raportów diagnostycznych `.vblog` (AES-256-GCM + kompresja `zlib`) zawierających pełną telemetrię połączeń BLE, modele kontrolerów, historię rozłączeń/wznowień i opcjonalny opis użytkownika.
 - **Instrukcja zgłaszania błędów:** Dodano opis obsługi logów diagnostycznych w oknie pomocy oraz dokumentacji.
 
