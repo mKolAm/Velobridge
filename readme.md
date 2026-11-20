@@ -266,11 +266,22 @@ Wszystkie ustawienia, sparowane adresy manetek oraz własne mapowania przyciskó
 - **Windows:** Usuń plik `VeloBridge_config.json` z folderu programu.
 - **macOS:** Usuń plik `~/Library/Application Support/VeloBridge/VeloBridge_config.json`.
 
+### ❓ Manetki rozłączyły się podczas jazdy lub występują błędy — jak zgłosić problem?
+- Aplikacja stale rejestruje w pamięci szczegóły połączeń BLE (modele i wersje kontrolerów, usługi GATT, czas połączenia przed rozłączeniem, błędy `keepalive`, próby `Auto-Reconnect`, poziom baterii i siłę sygnału RSSI).
+- **Ważne:** Nie zamykaj aplikacji od razu po wystąpieniu problemu (bufor zdarzeń znajduje się w pamięci).
+- W prawym panelu **„OPCJE & LIVE MONITOR”** kliknij przycisk **`🐞 Log problemu`**.
+- W oknie raportu możesz opcjonalnie wpisać krótki opis sytuacji (np. *„prawa manetka rozłączyła się dwukrotnie po 15 minutach jazdy”*), a następnie kliknąć **`💾 Zapisz zaszyfrowany log (.vblog)`**.
+- Powstały plik `.vblog` jest zaszyfrowany (AES-256-GCM) — nikt postronny nie może go odczytać. Prześlij ten plik autorowi do analizy i debugowania.
+
 ---
 
 ## 10. Historia zmian (Changelog)
 
-### Wersja 1.7.0 (Najnowsza)
+### Wersja 1.7.1 (Najnowsza)
+- **Zaszyfrowane logowanie problemów (`🐞 Log problemu`):** Dodano przycisk w panelu głównym oraz okno eksportu zaszyfrowanych raportów diagnostycznych `.vblog` (AES-256-GCM + kompresja `zlib`) zawierających pełną telemetrię połączeń BLE, modele kontrolerów, historię rozłączeń/wznowień i opcjonalny opis użytkownika.
+- **Instrukcja zgłaszania błędów:** Dodano opis obsługi logów diagnostycznych w oknie pomocy oraz dokumentacji.
+
+### Wersja 1.7.0
 - **Automatyczna obsługa Zwift Click v1 (2 przyciski `+` / `−`):** Dekoder pakietów `0x37`, bezpośredni handshake `RideOn` (bez wymogu 24h Unlock), automatyczne przełączanie kokpitu na 2-przyciskowy widok oraz 2-krokowa diagnostyka.
 - **Uniwersalny Moduł Kontrolerów Bluetooth (`🎛️ Inny BT / Pilot`):**
   - **Tryb Nauki BLE GATT:** obsługa manetek firm trzecich (m.in. **Cycplus BC2**, **ThinkRider VS200**, **OpenBikeControl**) poprzez automatyczną subskrypcję kanałów BLE i zapis sygnatur przycisków.

@@ -4,6 +4,20 @@ Wszystkie istotne zmiany, usprawnienia oraz poprawki wprowadzone w aplikacji zos
 
 ---
 
+## [1.7.1] - Szyfrowane logi diagnostyczne (.vblog) oraz poprawka Auto-Reconnect
+
+### ✨ Nowe funkcje
+- **Szyfrowane logowanie problemów (`🐞 Log problemu`):**
+  - Dodano przycisk `🐞 Log problemu` w panelu **OPCJE & LIVE MONITOR** oraz okno eksportu zaszyfrowanych raportów diagnostycznych `.vblog` (AES-256-GCM + kompresja `zlib`).
+  - Aplikacja stale buforuje w pamięci szczegółową telemetrię połączeń BLE: wykryte modele i wersje kontrolerów, usługi/charakterystyki GATT, czas pracy przed rozłączeniem, błędy `keepalive`, próby `Auto-Reconnect`, poziom baterii i siłę sygnału `RSSI`.
+  - Dodano instrukcję zgłaszania problemów w oknie Pomocy (`❓ Pomoc`), `readme.md` oraz `POMOC_I_INSTRUKCJA_GITHUB.md`.
+
+### 🐛 Poprawki błędów i stabilność BLE
+- **Naprawa pętli `Auto-Reconnect`:** Nieudana próba ponownego połączenia (`is_reconnect=True`) nie anuluje już zadania `_auto_reconnect`, dzięki czemu aplikacja cierpliwie wznawia próby aż do powrotu lub wybudzenia manetki.
+- **Sekwencyjne łączenie pary kontrolerów:** Druga manetka czeka na zakończenie fazy GATT/ECDH pierwszej (z limitem 5 s), co zapobiega przeciążeniu pojedynczego radia Bluetooth w Windows i błędom `BleakDeviceNotFoundError` przy starcie.
+
+---
+
 ## [1.7.0] - Zwift Click v1 oraz Uniwersalny Moduł Kontrolerów Bluetooth (Cycplus BC2 / Piloty HID)
 
 ### ✨ Nowe funkcje i wsparcie sprzętowe
